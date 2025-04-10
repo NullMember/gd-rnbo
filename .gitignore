@@ -56,3 +56,6 @@ compile_commands.json
 
 # Jetbrains
 .idea/
+
+# CMake
+build/
