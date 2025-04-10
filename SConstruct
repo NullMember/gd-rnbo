@@ -5,7 +5,7 @@ import sys
 from methods import print_error
 
 
-libname = "EXTENSION-NAME"
+libname = "gdrnbo"
 projectdir = "demo"
 
 localEnv = Environment(tools=["default"], PLATFORM="")
@@ -44,7 +44,11 @@ Run the following command to download godot-cpp:
 env = SConscript("godot-cpp/SConstruct", {"env": env, "customs": customs})
 
 env.Append(CPPPATH=["src/"])
+env.Append(CPPPATH=["rnbo-src/rnbo/"])
+env.Append(CPPPATH=["rnbo-src/rnbo/common/"])
 sources = Glob("src/*.cpp")
+sources += Glob("rnbo-src/rnbo_source.cpp")
+sources += Glob("rnbo-src/rnbo/RNBO.cpp")
 
 if env["target"] in ["editor", "template_debug"]:
     try:
@@ -61,7 +65,7 @@ library = env.SharedLibrary(
     source=sources,
 )
 
-copy = env.InstallAs("{}/bin/{}/lib{}".format(projectdir, env["platform"], file), library)
+copy = env.InstallAs("{}/addons/gdrnbo/{}/lib{}".format(projectdir, env["platform"], file), library)
 
 default_args = [library, copy]
 Default(*default_args)

@@ -1,0 +1,15 @@
+[gd_resource type="AudioBusLayout" load_steps=3 format=3 uid="uid://cn52aoe74ilum"]
+
+[sub_resource type="GDRNBOEffect" id="GDRNBOEffect_j3pel"]
+frequency = 1621.62
+resource_name = "GDRNBOEffect"
+
+[sub_resource type="AudioEffectLowPassFilter" id="AudioEffectLowPassFilter_j3pel"]
+resource_name = "LowPassFilter"
+db = 3
+
+[resource]
+bus/0/effect/0/effect = SubResource("GDRNBOEffect_j3pel")
+bus/0/effect/0/enabled = true
+bus/0/effect/1/effect = SubResource("AudioEffectLowPassFilter_j3pel")
+bus/0/effect/1/enabled = true

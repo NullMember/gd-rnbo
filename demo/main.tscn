@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://um5p88yiqbdp"]
+
+[sub_resource type="AudioStreamGenerator" id="AudioStreamGenerator_7dm0k"]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="AudioListener2D" type="AudioListener2D" parent="."]
+position = Vector2(297, 261)
+current = true
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+position = Vector2(298, 237)
+stream = SubResource("AudioStreamGenerator_7dm0k")
