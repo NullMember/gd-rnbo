@@ -59,3 +59,7 @@ compile_commands.json
 
 # CMake
 build/
+
+# RNBO
+rnbo-src/*
+-rnbo-src/put-rnbo-export
