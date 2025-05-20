@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef GDRNBO_STREAM_H
-#define GDRNBO_STREAM_H
+#ifndef GDRNBO_EFFECT_H
+#define GDRNBO_EFFECT_H
 
 #include <RNBO.h>
 #include <godot_cpp/godot.hpp>
@@ -15,19 +15,19 @@
 
 namespace godot
 {
-    class GDRNBOEffect;
+    class RNBOEffect;
 
     // GDRNBO Effect Instance
     /**
-     * @class GDRNBOInstance
+     * @class RNBOInstance
      * @brief An instance of the GDRNBO effect.
      *
      * This class is responsible for processing audio and managing the RNBO object.
      **/
-    class GDRNBOInstance : public AudioEffectInstance
+    class RNBOInstance : public AudioEffectInstance
     {
-        GDCLASS(GDRNBOInstance, AudioEffectInstance);
-        friend class GDRNBOEffect;
+        GDCLASS(RNBOInstance, AudioEffectInstance);
+        friend class RNBOEffect;
         
         private:
         RNBO::CoreObject *rnbo_object = nullptr;
@@ -49,29 +49,29 @@ namespace godot
         static void _bind_methods();
         
         public:
-        GDRNBOInstance();
-        ~GDRNBOInstance();
+        RNBOInstance();
+        ~RNBOInstance();
         
         void _process(const void *p_src_buffer, AudioFrame *p_dst_buffer, int32_t p_frame_count) override;
 
-        Ref<GDRNBOEffect> base;
+        Ref<RNBOEffect> base;
     };
 
     // GDRNBO Effect
     /**
-     * @class GDRNBOEffect
+     * @class RNBOEffect
      * @brief The GDRNBO effect class.
      *
      * This class is responsible for creating instances of the GDRNBO effect.
      **/
-    class GDRNBOEffect : public AudioEffect
+    class RNBOEffect : public AudioEffect
     {
-        GDCLASS(GDRNBOEffect, AudioEffect);
-        friend class GDRNBOInstance;
+        GDCLASS(RNBOEffect, AudioEffect);
+        friend class RNBOInstance;
 
     private:
         AudioServer *audio_server = nullptr;
-        GDRNBOInstance *instance = nullptr;
+        RNBOInstance *instance = nullptr;
         List<PropertyInfo> *properties = nullptr;
         
     protected:
@@ -79,8 +79,8 @@ namespace godot
 
     public:
         Ref<AudioEffectInstance> _instantiate() override;
-        GDRNBOEffect();
-        ~GDRNBOEffect();
+        RNBOEffect();
+        ~RNBOEffect();
 
         void _get_property_list(List<PropertyInfo> *r_props) const;      // return list of properties
         bool _get(const StringName &p_property, Variant &r_value) const; // return true if property was found

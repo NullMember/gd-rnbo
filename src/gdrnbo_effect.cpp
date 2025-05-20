@@ -1,14 +1,14 @@
-#include "gdrnbo.h"
+#include "gdrnbo_effect.h"
 
 namespace godot {
 
     // GDRNBO Effect Instance
 
-    void GDRNBOInstance::_bind_methods() {
-        // ClassDB::bind_method(D_METHOD("process"), &GDRNBOInstance::_process);
+    void RNBOInstance::_bind_methods() {
+        // ClassDB::bind_method(D_METHOD("process"), &RNBOInstance::_process);
     }
 
-    void GDRNBOInstance::_process(const void *p_src_buffer, AudioFrame *p_dst_buffer, int32_t p_frame_count)
+    void RNBOInstance::_process(const void *p_src_buffer, AudioFrame *p_dst_buffer, int32_t p_frame_count)
     {
         if (rnbo_object) {
             AudioFrame *src_buffer = (AudioFrame *)p_src_buffer;
@@ -32,7 +32,7 @@ namespace godot {
         }
     }
 
-    GDRNBOInstance::GDRNBOInstance()
+    RNBOInstance::RNBOInstance()
     {
         audio_server = AudioServer::get_singleton();
         rnbo_object = new RNBO::CoreObject();
@@ -57,7 +57,7 @@ namespace godot {
         }
     }
 
-    GDRNBOInstance::~GDRNBOInstance()
+    RNBOInstance::~RNBOInstance()
     {
         if (rnbo_object) {
             delete rnbo_object;
@@ -88,27 +88,28 @@ namespace godot {
 
     // GDRNBO Effect
 
-    void GDRNBOEffect::_bind_methods() {
-        ClassDB::bind_method(D_METHOD("instantiate"), &GDRNBOEffect::_instantiate);
+    void RNBOEffect::_bind_methods() {
+        ClassDB::bind_method(D_METHOD("instantiate"), &RNBOEffect::_instantiate);
     }
-    GDRNBOEffect::GDRNBOEffect() {
+    RNBOEffect::RNBOEffect() {
         audio_server = AudioServer::get_singleton();
     }
-    GDRNBOEffect::~GDRNBOEffect() {
-        if (audio_server) {
-            audio_server = nullptr;
+    RNBOEffect::~RNBOEffect() {
+        if (instance) {
+            delete instance;
+            instance = nullptr;
         }
     }
-    Ref<AudioEffectInstance> GDRNBOEffect::_instantiate() {
-        Ref<GDRNBOInstance> instance;
+    Ref<AudioEffectInstance> RNBOEffect::_instantiate() {
+        Ref<RNBOInstance> instance;
         instance.instantiate();
-        instance->base = Ref<GDRNBOEffect>(this);
+        instance->base = Ref<RNBOEffect>(this);
         this->instance = instance.ptr();
         // set parameters
         return instance;
     }
 
-    void GDRNBOEffect::_get_property_list(List<PropertyInfo> *r_props) const {
+    void RNBOEffect::_get_property_list(List<PropertyInfo> *r_props) const {
         // Add properties to the list
         if(instance) {
             for (size_t i = 0; i < instance->num_params; i++)
@@ -118,7 +119,7 @@ namespace godot {
         }
     }
 
-    bool GDRNBOEffect::_get(const StringName &p_property, Variant &r_value) const
+    bool RNBOEffect::_get(const StringName &p_property, Variant &r_value) const
     {
         if(instance) {
             for (size_t i = 0; i < instance->num_params; i++)
@@ -131,7 +132,7 @@ namespace godot {
         }
         return false;
     }
-    bool GDRNBOEffect::_set(const StringName &p_property, const Variant &p_value)
+    bool RNBOEffect::_set(const StringName &p_property, const Variant &p_value)
     {
         if(instance) {
             for (size_t i = 0; i < instance->num_params; i++)

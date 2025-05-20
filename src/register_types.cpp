@@ -4,7 +4,8 @@
 #include <godot_cpp/core/defs.hpp>
 #include <godot_cpp/godot.hpp>
 
-#include "gdrnbo.h"
+#include "gdrnbo_effect.h"
+#include "gdrnbo_stream.h"
 
 using namespace godot;
 
@@ -13,8 +14,10 @@ void initialize_gdextension_types(ModuleInitializationLevel p_level)
 	if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE) {
 		return;
 	}
-	GDREGISTER_CLASS(GDRNBOEffect);
-	GDREGISTER_CLASS(GDRNBOInstance);
+	GDREGISTER_CLASS(RNBOEffect);
+	GDREGISTER_CLASS(RNBOInstance);
+	GDREGISTER_CLASS(RNBOStream);
+	GDREGISTER_CLASS(RNBOPlayback);
 }
 
 void uninitialize_gdextension_types(ModuleInitializationLevel p_level) {
