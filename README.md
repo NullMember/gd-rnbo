@@ -1,29 +1,37 @@
-# godot-cpp template
-This repository serves as a quickstart template for GDExtension development with Godot 4.0+.
+# gd-rnbo: Use Cycling74's RNBO exports as stream or audio effect in Godot
+RNBO is MaxMSP's new audio engine that allows you to export your Max patches as C++ code. This repository contains a GDExtension that allows you to use these exports in Godot as a stream or audio effect.
 
-## Contents
-* An empty Godot project (`demo/`)
-* godot-cpp as a submodule (`godot-cpp/`)
-* GitHub Issues template (`.github/ISSUE_TEMPLATE.yml`)
-* GitHub CI/CD workflows to publish your library packages when creating a release (`.github/workflows/builds.yml`)
-* preconfigured source files for C++ development of the GDExtension (`src/`)
-* setup to automatically generate `.xml` files in a `doc_classes/` directory to be parsed by Godot as [GDExtension built-in documentation](https://docs.godotengine.org/en/stable/tutorials/scripting/gdextension/gdextension_docs_system.html)
+# Building
 
-## Usage - Template
+## Prerequisites
+- Godot 4.0 or later
+- C++ compiler (e.g. GCC, Clang, MSVC)
+- SConstruct
 
-To use this template, log in to GitHub and click the green "Use this template" button at the top of the repository page.
-This will let you create a copy of this repository with a clean git history. Make sure you clone the correct branch as these are configured for development of their respective Godot development branches and differ from each other. Refer to the docs to see what changed between the versions.
+## GDExtension
 
-For getting started after cloning your own copy to your local machine, you should: 
-* initialize the godot-cpp git submodule via `git submodule update --init`
-* change the name of your library
-  * change the name of the compiled library file inside the `SConstruct` file by modifying the `libname` string.
-  * change the pathnames of the to be loaded library name inside the `demo/bin/example.gdextension` file. By replacing `libgdexample` to the name specified in your `SConstruct` file.
-  * change the name of the `demo/bin/example.gdextension` file
-* change the `entry_symbol` string inside your `demo/bin/your-extension.gdextension` file to be configured for your GDExtension name. This should be the same as the `GDExtensionBool GDE_EXPORT` external C function. As the name suggests, this sets the entry function for your GDExtension to be loaded by the Godot editors C API.
-* register the classes you want Godot to interact with inside the `register_types.cpp` file in the initialization method (here `initialize_gdextension_types`) in the syntax `GDREGISTER_CLASS(CLASS-NAME);`.
+1. Clone this repository with `git clone --recurse-submodules`
+2. Export RNBO C++ Source Code in `rnbo-src` folder
+    - Ensure `Copy C++ library code` is checked in the export settings if you're exporting it for the first time.
+3. Comment all exception throws in rnbo source code (search throw in all sources)
+    - Godot does not support exceptions, so you need to comment them out. This is common in game engines for performance reasons.
+    - This is required for the first time you export the RNBO patch. For consequtive exports disable the `Copy C++ library code` option in the export settings.
+4. Build the GDExtension with SConstruct
+5. Copy demo/addons folder to your Godot project
 
-## Usage - Actions
+# Usage
 
-This repository comes with a GitHub action that builds the GDExtension for cross-platform use. It triggers automatically for each pushed change. You can find and edit it in [builds.yml](.github/workflows/builds.yml).
-After a workflow run is complete, you can find the file `godot-cpp-template.zip` on the `Actions` tab on GitHub.
+## RNBO Effect
+
+RNBO Effect is a GDExtension that allows you to use RNBO patches as audio effects in Godot. It is a subclass of AudioEffect and can be used in the same way as any other audio effect in Godot.  
+In RNBO you can get audio input using `in~ 0` and `in~ 1` (left and right channel respectively) and send audio output using `out~ 0` and `out~ 1`.
+
+## RNBO Stream
+
+You can use AudioStreamPlayer2D or AudioStreamPlayer3D to play RNBO stream. Add RNBOStream as a stream to the AudioStreamPlayer2D or AudioStreamPlayer3D node.  
+If you set playing to true, RNBOStream will send 1 to `param play` in the RNBO patch.
+If you set `param stop` to 1 in RNBO patch, the stream will stop playing in Godot. 
+
+## Parameters in RNBO patch
+
+All parameters in the RNBO patch will be automatically exposed in Godot editor (except play and stop parameters). You can access all parameters you created in the RNBO patch using the same way you access any AudioEffect or AudioStream parameters in Godot.
